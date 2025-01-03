@@ -1,0 +1,143 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.8.2/css/all.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.8.2/css/brands.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.8.2/css/solid.css" rel="stylesheet" />
+    <link href="https://bootswatch.com/5/spacelab/bootstrap.css" rel="stylesheet" id="themedStyle">
+
+    <link rel="stylesheet" href="https://aaronrs2002.github.io/black-jack/css/animate.min.css" />
+    <link href="https://aaronrs2002.github.io/black-jack/css/shared.css" rel="stylesheet" />
+    <link href="css/style.css" rel="stylesheet" />
+    <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+
+    <title>Clock In Clock Out</title>
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-JJWFFXF8G0"></script>
+    <script>
+        const urlStr = window.location.href;
+        if (urlStr.indexOf("file:///Users/") !== -1 || urlStr.indexOf("exclude") !== -1) {
+            console.log("Not running GA");
+        } else {
+            window.dataLayer = window.dataLayer || [];
+            function gtag() { dataLayer.push(arguments); }
+            gtag('js', new Date());
+            gtag('config', 'G-JJWFFXF8G0');
+        }
+    </script>
+
+</head>
+
+<body class="wLogo">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <input type="text" name="email" class="form-control" placeholder="Your Email Address" />
+            </div>
+
+
+            <div class="col-md-12 mb-5">
+                <h2>Clock IN/OUT </h2>
+                <div id="inOutBts" class="list-group mb-3 hide">
+
+                    <button type="button" data-clock="in" class="list-group-item list-group-item-success"
+                        onClick="inOut('in')">Clock
+                        In</button>
+                    <button type="button" data-clock="out" class="hide list-group-item list-group-item-danger"
+                        onClick="inOut('out')">Clock
+                        Out</button>
+                </div>
+                <input type="text" name="filter" class="form-control" placeholder="Filter hours"
+                    onChange="filterHours()" />
+                <ul class="list-group" id="clockInOutWindow">
+                    <!-- {timeClock ?
+                    timeClock.map((tc, i) => {
+                    if (tc.timeOut !== "noTimeYet") {
+                    return (<li class="list-group-item" key={i}>{timestamp(tc.timeIn) + " - " + timestamp(tc.timeOut) + "
+                        Worked: " + ((((tc.timeOut - tc.timeIn) / 1000) / 60) / 60).toFixed(2) + " Hours"}</li>)
+                    } else {
+                    return (<li class="list-group-item list-group-item-light" key={i}>{timestamp(tc.timeIn) + " - Currently
+                        working."}</li>)
+                    }
+                    })
+                    : null}-->
+                </ul>
+                <hr />
+                <h3 class="my-3">Total Hours: <span data-target="total"></span></h3>
+            </div>
+            <div class="col-md-12">
+                <HourlyBarChart email={props.email} />
+            </div>
+
+            <div class="col-md-12 hide">
+                <h2>Clock Timer </h2>
+                <div class="list-group mb-3">
+                    <button class="list-group-item list-group-item-success" onClick="startTimer(true)">Start
+                        Timer</button> :
+                    <button class="list-group-item list-group-item-danger" onClick="startTimer(false)">Stop
+                        Timer</button>
+
+                </div>
+                <h2>Time:{time}</h2>
+                <button class="btn btn-block" onClick="startTimer(false)">Reset Timer</button>
+
+            </div>
+
+
+            <div class="col-md-6">
+                <label>End Year</label>
+                <select name="dateEndYear" class="form-control" onChange="addUpDayTotals('year')">
+                    <!-- <option value={year}>{year}</option>
+                    <option value={year - 1}>{year - 1}</option>-->
+
+                </select>
+            </div>
+            <div class="col-md-6">
+                <label>End Month</label>
+                <select name="dateEndMonth" class="form-control" onChange="addUpDayTotals('month')">
+                    <option value="default">Select Month</option>
+                    <!---{counter.length > 0 ? counter.map((num, i) => {
+                    if (i < 12) { return (<option value={num} key={i}>{num}</option>);
+                        }
+
+
+                        }) : null}-->
+                </select>
+            </div>
+
+
+
+            <div class="col-md-12" id="chart">
+                <!-- <ReactApexChart options={options} series={options.series} type="bar" />-->
+            </div>
+
+
+        </div>
+
+
+    </div>
+    <div class="hide alert fadeInUp" role="alert" id="globalAlert"></div>
+    <footer class="footer mt-auto py-3 animated fadeInUp">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="btn-group block my-2" role="group" id="gameLinks"></div>
+                </div>
+                <div class="col-md-2 my-2"> <select class="form-control" onChange="changeTheme()" id="themes"></select>
+                </div>
+                <div class="col-md-4" id="socialList">
+                </div>
+                <div class="col-md-2 my-3" id="year"></div>
+            </div>
+        </div>
+    </footer>
+</body>
+<script src="js/Validate.js"></script>
+<script src="js/timestamp.js"></script>
+<script src="https://aaronrs2002.github.io/black-jack/js/footer.js"></script>
+<script src="js/functionality.js"></script>
+
+</html>
