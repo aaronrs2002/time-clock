@@ -84,22 +84,24 @@ const getTotal = (data) => {
 }
 
 
-const filterHours = () => {
+const filterHours = (data) => {
     getTotal([]);
     // setTimeClock((timeClock) => []);
     timeClock = [];
     let tempData = [];
     let filterVal = document.querySelector("input[name='filter']").value;
-    const tempInOrOut = JSON.parse(localStorage.getItem(email + ":timeClock"));
+    const tempInOrOut = data;
     for (let i = 0; i < tempInOrOut.length; i++) {
         let dateStr = timestamp(tempInOrOut[i].timeIn);
         if (dateStr.indexOf(filterVal) !== -1) {
             tempData.push(tempInOrOut[i]);
         }
     }
+    console.log("JSON.stringify(data): " + JSON.stringify(data))
     getTotal(tempData);
     // setTimeClock((timeClock) => tempData);
     timeClock = tempData;
+    populateTime(timeClock);
 }
 
 
@@ -249,7 +251,7 @@ const addUpDayTotals = (ym) => {
     populateTime(data);
 
 
-    console.log("JSON.stringify(data): " + JSON.stringify(data));
+
     let daysList = [];
     let daysTotal = [];
     let endDateYear = document.querySelector("[name='dateEndYear']").value;
@@ -349,7 +351,7 @@ const addUpDayTotals = (ym) => {
                 categories
             },
         };
-        console.log("JSON.stringify(options): " + JSON.stringify(options));
+        //   console.log("JSON.stringify(options): " + JSON.stringify(options));
         var chart = new ApexCharts(document.querySelector("#chart"), options);
         chart.render();
 
@@ -362,6 +364,8 @@ const addUpDayTotals = (ym) => {
 
 
 const inOut = (inOrOut) => {
+
+    document.getElementById("chart").innerHTML = "";
 
     email = runEmail()
 
@@ -391,7 +395,7 @@ const inOut = (inOrOut) => {
         if (localStorage.getItem(email + ":timeClock")) {
             tempInOrOut = JSON.parse(localStorage.getItem(email + ":timeClock"));
             getTotal(tempInOrOut);
-            console.log("JSON.stringify(tempInOrOut): " + JSON.stringify(tempInOrOut));
+            //     console.log("JSON.stringify(tempInOrOut): " + JSON.stringify(tempInOrOut));
             if (tempInOrOut[tempInOrOut.length - 1].timeOut === "noTimeYet") {
                 tempInOrOut[tempInOrOut.length - 1].timeOut = Date.now();
             }
