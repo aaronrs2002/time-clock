@@ -30,7 +30,10 @@ const runEmail = () => {
     }
     let usingTicket = "";
     if (localStorage.getItem("activeTicket")) {
-        usingTicket = ":" + localStorage.getItem("activeTicket");
+        if (localStorage.getItem("activeTicket") !== "default") {
+            usingTicket = ":" + localStorage.getItem("activeTicket");
+        }
+
     }
     return document.querySelector("[name='email']").value + usingTicket;
 }
@@ -472,9 +475,7 @@ if (localStorage.getItem("taskList")) {
 
 const addTask = () => {
     let taskValue = document.getElementById("taskTarget").value;
-    if (taskValue === "default") {
-        return false;
-    }
+
 
     localStorage.setItem("activeTicket", taskValue);
 
