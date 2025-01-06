@@ -473,6 +473,8 @@ if (localStorage.getItem("taskList")) {
 
 }
 
+
+
 const addTask = () => {
     let taskValue = document.getElementById("taskTarget").value;
 
@@ -480,3 +482,5 @@ const addTask = () => {
     localStorage.setItem("activeTicket", taskValue);
 
 }
+
+localStorage.setItem("activeTicket", 'default');
