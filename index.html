@@ -34,7 +34,7 @@
 <body class="wLogo">
     <div class="container">
         <div class="row">
-            <div class="col-md-12">
+            <div class="col-md-12 noPrint ">
                 <h2>Who is working?</h2>
                 <small><i>Fill in your email address. Then select the year and month you are in below to
                         start.</i></small>
@@ -46,7 +46,7 @@
 
             <div class="col-md-12 mb-5">
                 <h2>Clock IN/OUT </h2>
-                <div id="inOutBts" class="list-group mb-3 hide">
+                <div id="inOutBts" class="list-group mb-3 showAtData hide noPrint ">
 
                     <button type="button" data-clock="in" class="list-group-item list-group-item-success"
                         onClick="inOut('in')">Clock
@@ -55,7 +55,7 @@
                         onClick="inOut('out')">Clock
                         Out</button>
                 </div>
-                <input type="text" name="filter" class="form-control" placeholder="Filter hours"
+                <input type="text" name="filter" class="form-control noPrint showAtData hide" placeholder="Filter hours"
                     onKeyUp="filterHours()" /><!--be back to update the filter-->
                 <ul class="list-group" id="clockInOutWindow">
                     <!-- {timeClock ?
@@ -71,11 +71,12 @@
                     : null}-->
                 </ul>
                 <hr />
-                <h3 class="my-3">Total Hours: <span data-target="total"></span></h3>
+                <h3 class="my-3 showAtData hide">Total Hours: <span data-target="total"></span></h3>
+                <button class="btn btn-block btn-success p-1 showAtData hide noPrint"
+                    onClick="javascript:window.print();">Print
+                    Hours</button>
             </div>
-            <div class="col-md-12">
-                <HourlyBarChart email={props.email} />
-            </div>
+
 
             <div class="col-md-12 hide">
                 <h2>Clock Timer </h2>
@@ -92,7 +93,7 @@
             </div>
 
 
-            <div class="col-md-6">
+            <div class="col-md-6 noPrint ">
                 <label>End Year</label>
                 <select name="dateEndYear" class="form-control" onChange="addUpDayTotals('year')">
                     <!-- <option value={year}>{year}</option>
@@ -100,7 +101,7 @@
 
                 </select>
             </div>
-            <div class="col-md-6">
+            <div class="col-md-6 noPrint ">
                 <label>End Month</label>
                 <select name="dateEndMonth" class="form-control" onChange="addUpDayTotals('month')">
                     <option value="default">Select Month</option>
