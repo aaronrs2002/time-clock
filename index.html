@@ -56,10 +56,15 @@
                 <small><i>Fill in your email address. Then select the year and month you are in below to
                         start.</i></small>
             </div>
-            <div class="col-md-12">
+            <div class="col-md-6">
                 <input type="text" name="email" class="form-control" placeholder="Your Email Address" />
             </div>
+            <div class="col-md-6">
 
+                <select class="form-control" id="taskTarget" onChange="addTask()">
+                    <option value="default">Select task/ticket if available</option>
+                </select>
+            </div>
 
             <div class="col-md-12 mb-5">
                 <h2>Clock IN/OUT </h2>

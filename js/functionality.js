@@ -18,13 +18,21 @@ let day = timestamp(new Date()).substring(8, 10);
 let counter = [];
 let email = "";
 
+
+
 const runEmail = () => {
+
+
     Validate(["email"]);
     if (document.querySelector(".error")) {
         globalAlert("alert-warning", "Please type in an email address.");
         return false;
     }
-    return document.querySelector("[name='email']").value;
+    let usingTicket = "";
+    if (localStorage.getItem("activeTicket")) {
+        usingTicket = ":" + localStorage.getItem("activeTicket");
+    }
+    return document.querySelector("[name='email']").value + usingTicket;
 }
 
 const populateTime = (data) => {
@@ -449,3 +457,25 @@ if (loaded === false && localStorage.getItem(email + ":timeClock")) {
 
 }
 //})*/
+
+
+if (localStorage.getItem("taskList")) {
+    let taskListHTML = document.getElementById("taskTarget").innerHTML;
+    let tempList = JSON.parse(localStorage.getItem("taskList"));
+    for (let i = 0; i < tempList.length; i++) {
+        taskListHTML = taskListHTML + "<option value-='" + tempList[i].task + "'>" + tempList[i].task + "</option>";
+    }
+
+    document.getElementById("taskTarget").innerHTML = taskListHTML;
+
+}
+
+const addTask = () => {
+    let taskValue = document.getElementById("taskTarget").value;
+    if (taskValue === "default") {
+        return false;
+    }
+
+    localStorage.setItem("activeTicket", taskValue);
+
+}
