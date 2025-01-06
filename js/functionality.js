@@ -299,12 +299,14 @@ const addUpDayTotals = (ym) => {
                 categories = daysList;
                 //setTotals((totals) => daysTotal);
                 totals = daysTotal;
+                let graphTotalList = [];
                 let tempTotal = 0;
                 for (let i = 0; i < totals.length; i++) {
-                    if (totals[i] === 'NaN') {
-                        return false;
+                    if (totals[i] !== 'NaN') {
+                        tempTotal = Number(tempTotal) + Number(totals[i]);
+                        graphTotalList.push(Number(totals[i]))
                     }
-                    tempTotal = Number(tempTotal) + Number(totals[i]);
+
                 }
                 [].forEach.call(document.querySelectorAll("[data-target='total']"), (e) => {
                     e.innerHTML = tempTotal;
