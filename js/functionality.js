@@ -67,7 +67,7 @@ let second = 0;
 let minute = 0;
 let hour = 0;
 let runTimer = true;
-let timeClock = [];
+//let timeClock = [];
 let clockedIn = false;
 let totalHours = 0;
 
@@ -80,14 +80,18 @@ const getTotal = (data) => {
     }
     // setTotalHours((totalHours) => tempTotal);
     totalHours = tempTotal;
+    [].forEach.call(document.querySelectorAll("[data-target='total']"), (e) => {
+        e.innerHTML = tempTotal;
+    });
 
 }
 
 
 const filterHours = () => {
+    let email = runEmail();
     getTotal([]);
     // setTimeClock((timeClock) => []);
-    timeClock = [];
+    //timeClock = [];
     let tempData = [];
     let filterVal = document.querySelector("input[name='filter']").value;
     const tempInOrOut = JSON.parse(localStorage.getItem(email + ":timeClock"));
@@ -99,8 +103,10 @@ const filterHours = () => {
     }
     getTotal(tempData);
     // setTimeClock((timeClock) => tempData);
-    timeClock = tempData;
+    // timeClock = tempData;
+    populateTime(tempData);
 }
+
 
 
 
@@ -249,7 +255,7 @@ const addUpDayTotals = (ym) => {
     populateTime(data);
 
 
-    console.log("JSON.stringify(data): " + JSON.stringify(data));
+    // console.log("JSON.stringify(data): " + JSON.stringify(data));
     let daysList = [];
     let daysTotal = [];
     let endDateYear = document.querySelector("[name='dateEndYear']").value;
@@ -349,7 +355,7 @@ const addUpDayTotals = (ym) => {
                 categories
             },
         };
-        console.log("JSON.stringify(options): " + JSON.stringify(options));
+
         var chart = new ApexCharts(document.querySelector("#chart"), options);
         chart.render();
 
@@ -406,11 +412,11 @@ const inOut = (inOrOut) => {
 
     }
     // setTimeClock((timeClock) => tempInOrOut);
-    timeClock = tempInOrOut;
+    // timeClock = tempInOrOut;
 
-    populateTime(timeClock);
+    populateTime(tempInOrOut);
 
-    addUpDayTotals(timeClock);
+    addUpDayTotals(tempInOrOut);
 
 }
 
