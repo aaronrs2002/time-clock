@@ -1,0 +1,36 @@
+#chart {
+    padding-bottom: 4rem;
+}
+
+.printOnly {
+    display: none;
+}
+
+/*PRINT MEDIA*/
+
+
+
+@media print {
+
+    footer,
+    nav,
+    .noPrint {
+        display: none;
+    }
+
+    body,
+    li {
+        background-color: #fff !important;
+        color: #000 !important;
+    }
+
+    .printOnly {
+        display: block;
+    }
+
+
+}
+
+
+
+/*END PRINT MEDIA*/
