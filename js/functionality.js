@@ -224,6 +224,10 @@ const addUpDayTotals = (ym) => {
 
     email = runEmail();
 
+    [].forEach.call(document.querySelectorAll(".showAtData"), (e) => {
+        e.classList.remove("hide");
+    })
+
     document.getElementById("inOutBts").classList.remove("hide");
     data = [];
     /* console.log("ym: " + ym + " - email: " + email)
