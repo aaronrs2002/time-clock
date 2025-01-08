@@ -2,19 +2,19 @@
 /*let [categories, setCategories] = useState([]);
 let [totals, setTotals] = useState([]);
 let [loaded, setLoaded] = useState(false);
-let year = timestamp(new Date()).substring(0, 4);
-let month = timestamp(new Date()).substring(5, 7);
-let day = timestamp(new Date()).substring(8, 10);
+let year = timeclockTimestamp(new Date()).substring(0, 4);
+let month = timeclockTimestamp(new Date()).substring(5, 7);
+let day = timeclockTimestamp(new Date()).substring(8, 10);
 let [counter, setCounter] = useState([]);*/
 
 let categories = [];
 let totals = [];
 let loaded = false;
-let year = timestamp(new Date()).substring(0, 4);
+let year = timeclockTimestamp(new Date()).substring(0, 4);
 year = Number(year);
-let month = timestamp(new Date()).substring(5, 7);
+let month = timeclockTimestamp(new Date()).substring(5, 7);
 month = Number(month);
-let day = timestamp(new Date()).substring(8, 10);
+let day = timeclockTimestamp(new Date()).substring(8, 10);
 let counter = [];
 let email = "";
 
@@ -44,10 +44,10 @@ const populateTime = (data) => {
 
 
         if (data[i].timeOut !== "noTimeYet") {
-            clockInOutHTML = clockInOutHTML + "<li class='list-group-item' >" + timestamp(data[i].timeIn) + " - " + timestamp(data[i].timeOut) + " Worked: " + ((((data[i].timeOut - data[i].timeIn) / 1000) / 60) / 60).toFixed(2) + " Hours</li>";
+            clockInOutHTML = clockInOutHTML + "<li class='list-group-item' >" + timeclockTimestamp(data[i].timeIn) + " - " + timeclockTimestamp(data[i].timeOut) + " Worked: " + ((((data[i].timeOut - data[i].timeIn) / 1000) / 60) / 60).toFixed(2) + " Hours</li>";
         } else {
 
-            clockInOutHTML = clockInOutHTML + "<li class='list-group-item list-group-item-light' >" + timestamp(data[i].timeIn) + " - Currently working.</li>";
+            clockInOutHTML = clockInOutHTML + "<li class='list-group-item list-group-item-light' >" + timeclockTimestamp(data[i].timeIn) + " - Currently working.</li>";
         }
     }
 
@@ -107,7 +107,7 @@ const filterHours = () => {
     let filterVal = document.querySelector("input[name='filter']").value;
     const tempInOrOut = JSON.parse(localStorage.getItem(email + ":timeClock"));
     for (let i = 0; i < tempInOrOut.length; i++) {
-        let dateStr = timestamp(tempInOrOut[i].timeIn);
+        let dateStr = timeclockTimestamp(tempInOrOut[i].timeIn);
         if (dateStr.indexOf(filterVal) !== -1) {
             tempData.push(tempInOrOut[i]);
         }
@@ -254,10 +254,10 @@ const addUpDayTotals = (ym) => {
 
 
         if (data[i].timeOut !== "noTimeYet") {
-            clockInOutHTML = clockInOutHTML + "<li class='list-group-item' >" + timestamp(data[i].timeIn) + " - " + timestamp(data[i].timeOut) + " Worked: " + ((((data[i].timeOut - data[i].timeIn) / 1000) / 60) / 60).toFixed(2) + " Hours</li>";
+            clockInOutHTML = clockInOutHTML + "<li class='list-group-item' >" + timeclockTimestamp(data[i].timeIn) + " - " + timeclockTimestamp(data[i].timeOut) + " Worked: " + ((((data[i].timeOut - data[i].timeIn) / 1000) / 60) / 60).toFixed(2) + " Hours</li>";
         } else {
 
-            clockInOutHTML = clockInOutHTML + "<li class='list-group-item list-group-item-light' >" + timestamp(data[i].timeIn) + " - Currently working.</li>";
+            clockInOutHTML = clockInOutHTML + "<li class='list-group-item list-group-item-light' >" + timeclockTimestamp(data[i].timeIn) + " - Currently working.</li>";
         }
     }
 
@@ -281,7 +281,7 @@ const addUpDayTotals = (ym) => {
 
         for (let i = 0; i < data.length; i++) {
             if (endDate !== "default") {
-                let dateHere = timestamp(new Date(data[i].timeIn));
+                let dateHere = timeclockTimestamp(new Date(data[i].timeIn));
                 dateHere = dateHere.toString();
                 if (dateHere.indexOf(endDate) !== -1) {
                     dateHere = dateHere.toString().substring(0, 10)
@@ -299,7 +299,7 @@ const addUpDayTotals = (ym) => {
                         if (data[j].timeOut !== "noTimeYet") {
 
                         }
-                        if (data[j].timeOut !== "noTimeYet" && yrMoSelected === timestamp(dateHere).substring(0, 7)) {
+                        if (data[j].timeOut !== "noTimeYet" && yrMoSelected === timeclockTimestamp(dateHere).substring(0, 7)) {
                             let tempNum = (daysTotal[i] + Number(((((data[i].timeOut - data[i].timeIn) / 1000) / 60) / 60).toFixed(2)))
                             daysTotal[i] = parseFloat(tempNum).toFixed(2);
                         }
