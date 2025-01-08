@@ -230,7 +230,7 @@ document.querySelector("[name='dateEndYear']").innerHTML = yearHTML;
 
 
 
-const addUpDayTotals = (ym) => {
+const addUpDayTotals = (ym, inOrOut) => {
 
 
     email = runEmail();
@@ -373,8 +373,17 @@ const addUpDayTotals = (ym) => {
             },
         };
 
-        var chart = new ApexCharts(document.querySelector("#chart"), options);
-        chart.render();
+        console.log("JSON.stringify(options): " + JSON.stringify(options));
+        if (inOrOut !== "in") {
+            document.querySelector("#chart").innerHTML = "<div class='loader'></div>";
+            setTimeout(() => {
+                document.querySelector("#chart").innerHTML = "";
+                var chart = new ApexCharts(document.querySelector("#chart"), options);
+                chart.render();
+            }, 1000);
+
+        }
+
 
     }
 
@@ -433,7 +442,7 @@ const inOut = (inOrOut) => {
 
     populateTime(tempInOrOut);
 
-    addUpDayTotals(tempInOrOut);
+    addUpDayTotals(tempInOrOut, inOrOut);
 
 }
 
