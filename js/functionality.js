@@ -223,10 +223,11 @@ for (let i = 1; i < 13; i++) {
 document.querySelector("[name='dateEndMonth']").innerHTML = monthList;
 
 let yearHTML = "";
-for (let i = year; i < (year + 1); i++) {
+for (let i = (year - 1); i < (year + 2); i++) {
     yearHTML = yearHTML + "<option value='" + i + "'>" + i + "</option>";
 }
 document.querySelector("[name='dateEndYear']").innerHTML = yearHTML;
+document.querySelector("[name='dateEndYear']").selectedIndex = 1;
 
 
 
