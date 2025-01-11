@@ -2,6 +2,9 @@
     padding-bottom: 4rem;
 }
 
+
+
+
 .printOnly {
     display: none;
 }
@@ -12,6 +15,7 @@
 
 @media print {
 
+    #chart,
     footer,
     nav,
     .noPrint {
