@@ -20,7 +20,7 @@
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-JJWFFXF8G0"></script>
     <script>
         const urlStr = window.location.href;
-        if (urlStr.indexOf("file:///Users/") !== -1 || urlStr.indexOf("exclude") !== -1) {
+        if (urlStr.indexOf(":3000") !== -1 || urlStr.indexOf("exclude") !== -1) {
             console.log("Not running GA");
         } else {
             window.dataLayer = window.dataLayer || [];
@@ -57,14 +57,32 @@
                 <small><i>Fill in your email address. Then select the year and month you are in below to
                         start.</i></small>
             </div>
-            <div class="col-md-6">
+            <div class="col-md-4">
                 <input type="text" name="email" class="form-control" placeholder="Your Email Address" />
             </div>
-            <div class="col-md-6">
+            <div class="col-md-4">
 
                 <select class="form-control" id="taskTarget" onChange="addTask()">
                     <option value="default">Select task/ticket if available</option>
                 </select>
+            </div>
+            <div class="col-md-4">
+                <button class="btn btn-block btn-danger p-1" onClick="toggle('deleteTime')" id="deleteBt"
+                    disabled>Delete
+                    Time</button>
+                <div class="alert alert-danger hide" role="alert" data-toggle="deleteTime">
+                    <ul class="list-unstyled">
+                        <li>
+                            <i><small>Ae you sure you want to delete this time?</small></i>
+                        </li>
+                        <li>
+
+                            <button class="btn btn-secondary" onClick="toggle('')">No</button><button
+                                class="btn btn-warning" onClick="deleteTime()">Yes</button>
+                        </li>
+                    </ul>
+
+                </div>
             </div>
 
             <div class="col-md-12 mb-5">

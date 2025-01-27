@@ -472,49 +472,82 @@ if (loaded === false && localStorage.getItem(email + ":timeClock")) {
 //})*/
 
 /*UPDATED 1-27-2025 GRAB ALL TIMELOCK RTASK, NOT JUST THE ACTIVE ONES FROM THE TASKMASTER*/
-let taskListHTML = document.getElementById("taskTarget").innerHTML;
-let tempTasks = [];
-for (let i = 0; i < localStorage.length; i++) {
-    const key = localStorage.key(i);
-    if (key.indexOf(":timeClock") !== -1) {
-        let taskName = key.substring(key.indexOf(":") + 1, key.length - 10);
-        if (tempTasks.indexOf(taskName) === -1 && taskName !== ":") {
-            taskListHTML = taskListHTML + "<option value-='" + taskName + "'>" + taskName + "</option>";
-            tempTasks.push(taskName);
-        }
-
-
-
-    }
-}
-document.getElementById("taskTarget").innerHTML = taskListHTML;
-
-
-if (localStorage.getItem("taskList")) {
+function buildTaskMenu() {
     let taskListHTML = document.getElementById("taskTarget").innerHTML;
-    let tempList = JSON.parse(localStorage.getItem("taskList"));
-    for (let i = 0; i < tempList.length; i++) {
-        if (tempTasks.indexOf(tempList[i].task) === -1) {
-            taskListHTML = taskListHTML + "<option value-='" + tempList[i].task + "'>" + tempList[i].task + "</option>";
-            tempTasks.push(tempList[i].task);
+    let tempTasks = [];
+    for (let i = 0; i < localStorage.length; i++) {
+        const key = localStorage.key(i);
+        if (key.indexOf(":timeClock") !== -1) {
+            let taskName = key.substring(key.indexOf(":") + 1, key.length - 10);
+            if (tempTasks.indexOf(taskName) === -1 && taskName !== ":") {
+                taskListHTML = taskListHTML + "<option value-='" + taskName + "'>" + taskName + "</option>";
+                tempTasks.push(taskName);
+            }
+
+
+
         }
-
     }
-
     document.getElementById("taskTarget").innerHTML = taskListHTML;
 
+
+    if (localStorage.getItem("taskList")) {
+        let taskListHTML = document.getElementById("taskTarget").innerHTML;
+        let tempList = JSON.parse(localStorage.getItem("taskList"));
+        for (let i = 0; i < tempList.length; i++) {
+            if (tempTasks.indexOf(tempList[i].task) === -1) {
+                taskListHTML = taskListHTML + "<option value-='" + tempList[i].task + "'>" + tempList[i].task + "</option>";
+                tempTasks.push(tempList[i].task);
+            }
+
+        }
+
+        document.getElementById("taskTarget").innerHTML = taskListHTML;
+
+    }
+
 }
+buildTaskMenu();
 
 
 
 
 
 const addTask = () => {
-    let taskValue = document.getElementById("taskTarget").value;
+    document.getElementById("deleteBt").disabled = false;
 
+    let taskValue = document.getElementById("taskTarget").value;
+    if (taskValue === "default") {
+        document.getElementById("deleteBt").disabled = true;
+    }
 
     localStorage.setItem("activeTicket", taskValue);
 
 }
 
 localStorage.setItem("activeTicket", 'default');
+
+
+function deleteTime() {
+
+    let whichTime = document.getElementById("taskTarget").value;
+    document.getElementById("taskTarget").classList.remove("error");
+    if (whichTime === "default") {
+        globalAlert("alert-warning", "Who are you deleting from the list?");
+        document.getElementById("taskTarget").classList.add("error");
+        return false;
+
+    }
+    let userEmail = document.querySelector("input[name='email']").value;
+    document.querySelector("input[name='email']").classList.remove("error");
+    if (userEmail === "") {
+        globalAlert("alert-warning", "What/who are you deleting from the list?");
+        document.querySelector("input[name='email']").classList.add("error");
+        return false;
+
+    }
+
+    localStorage.removeItem(userEmail + ":" + whichTime + ":timeClock")
+    toggle("");
+    buildTaskMenu();
+}
