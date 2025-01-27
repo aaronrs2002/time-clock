@@ -478,7 +478,7 @@ for (let i = 0; i < localStorage.length; i++) {
     const key = localStorage.key(i);
     if (key.indexOf(":timeClock") !== -1) {
         let taskName = key.substring(key.indexOf(":") + 1, key.length - 10);
-        if (tempTasks.indexOf(taskName) === -1) {
+        if (tempTasks.indexOf(taskName) === -1 && taskName !== ":") {
             taskListHTML = taskListHTML + "<option value-='" + taskName + "'>" + taskName + "</option>";
             tempTasks.push(taskName);
         }
