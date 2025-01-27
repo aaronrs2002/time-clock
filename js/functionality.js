@@ -471,8 +471,26 @@ if (loaded === false && localStorage.getItem(email + ":timeClock")) {
 }
 //})*/
 
+/*UPDATED 1-27-2025 GRAB ALL TIMELOCK RTASK, NOT JUST THE ACTIVE ONES FROM THE TASKMASTER*/
+let taskListHTML = document.getElementById("taskTarget").innerHTML;
+let tempTasks = [];
+for (let i = 0; i < localStorage.length; i++) {
+    const key = localStorage.key(i);
+    if (key.indexOf(":timeClock") !== -1) {
+        let taskName = key.substring(key.indexOf(":") + 1, key.length - 10);
+        if (tempTasks.indexOf(taskName) === -1) {
+            taskListHTML = taskListHTML + "<option value-='" + taskName + "'>" + taskName + "</option>";
+            tempTasks.push(taskName);
+        }
 
-if (localStorage.getItem("taskList")) {
+
+
+    }
+}
+document.getElementById("taskTarget").innerHTML = taskListHTML;
+
+
+/*if (localStorage.getItem("taskList")) {
     let taskListHTML = document.getElementById("taskTarget").innerHTML;
     let tempList = JSON.parse(localStorage.getItem("taskList"));
     for (let i = 0; i < tempList.length; i++) {
@@ -481,7 +499,9 @@ if (localStorage.getItem("taskList")) {
 
     document.getElementById("taskTarget").innerHTML = taskListHTML;
 
-}
+}*/
+
+
 
 
 
