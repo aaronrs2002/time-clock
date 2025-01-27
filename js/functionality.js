@@ -490,7 +490,7 @@ for (let i = 0; i < localStorage.length; i++) {
 document.getElementById("taskTarget").innerHTML = taskListHTML;
 
 
-/*if (localStorage.getItem("taskList")) {
+if (localStorage.getItem("taskList")) {
     let taskListHTML = document.getElementById("taskTarget").innerHTML;
     let tempList = JSON.parse(localStorage.getItem("taskList"));
     for (let i = 0; i < tempList.length; i++) {
@@ -499,7 +499,7 @@ document.getElementById("taskTarget").innerHTML = taskListHTML;
 
     document.getElementById("taskTarget").innerHTML = taskListHTML;
 
-}*/
+}
 
 
 
