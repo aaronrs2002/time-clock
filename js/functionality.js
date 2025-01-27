@@ -494,7 +494,11 @@ if (localStorage.getItem("taskList")) {
     let taskListHTML = document.getElementById("taskTarget").innerHTML;
     let tempList = JSON.parse(localStorage.getItem("taskList"));
     for (let i = 0; i < tempList.length; i++) {
-        taskListHTML = taskListHTML + "<option value-='" + tempList[i].task + "'>" + tempList[i].task + "</option>";
+        if (tempTasks.indexOf(tempList[i].task) === -1) {
+            taskListHTML = taskListHTML + "<option value-='" + tempList[i].task + "'>" + tempList[i].task + "</option>";
+            tempTasks.push(tempList[i].task);
+        }
+
     }
 
     document.getElementById("taskTarget").innerHTML = taskListHTML;
