@@ -161,26 +161,96 @@
                 <!-- <ReactApexChart options={options} series={options.series} type="bar" />-->
             </div>
 
+            <div class="col-md-12 py-1">
 
-        </div>
+                <div class="d-grid gap-2">
+                    <button class="btn btn-info" onClick="javascript:toggle('info')" type="button"
+                        data-toggle="default">View
+                        Information</button>
+                    <button class="btn btn-info hide" onClick="javascript:toggle('default')" type="button"
+                        data-toggle="info">Hide
+                        Information</button>
+                </div>
+
+                <div class="card hide" data-toggle="info" id="info">
+                    <div class="card-body  text-left">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <h2>JavaScript Time-Clock: From React.js to Vanilla JavaScript (Open Source on GitHub)
+                                </h2>
+                                <hr>
+                                <div>
+                                    <div class="row">
+                                        <div class="col-md-6"><iframe
+                                                style="width: 100%; height: auto; min-height: 270px;"
+                                                src="https://www.youtube.com/embed/OpZ4igksAaQ"
+                                                title="YouTube video player" frameborder="0"
+                                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                                allowfullscreen=""></iframe></div>
+                                        <div class="col-md-6">
+                                            <p>In this tutorial, I demonstrate how to convert a React.js application to
+                                                vanilla JavaScript. Using a
+                                                simple time-clock app as an example, I guide viewers through the entire
+                                                conversion process,
+                                                highlighting the differences in structure, logic, and styling between
+                                                the two approaches. This
+                                                tutorial is perfect for developers looking to understand the core
+                                                principles behind frameworks or
+                                                for those seeking lightweight, framework-free solutions. The finished
+                                                app is available for free on
+                                                GitHub to explore and customize.</p>
+
+                                            <p>Use the time-clock: <br>
+                                                <a href="https://aaronrs2002.github.io/time-clock/" target="_blank">
+                                                    https://aaronrs2002.github.io/time-clock/</a>
+                                            </p>
+
+                                            <p>See the code. Check back for updates:<br>
+                                                <a href="https://github.com/aaronrs2002/time-clock"
+                                                    target="_blank">https://github.com/aaronrs2002/time-clock</a>
+                                            </p>
 
 
-    </div>
-    <div class="hide alert fadeInUp" role="alert" id="globalAlert"></div>
-    <footer class="footer mt-auto py-3 animated fadeInUp">
-        <div class="container">
-            <div class="row">
-                <div class="col-md-4">
-                    <div class="btn-group block my-2" role="group" id="gameLinks"></div>
+                                            <p>Employee clock IN clock OUT module - React.js Tutorial 9 - Help Desk
+                                                Ticket Management System
+                                                <a href="https://www.youtube.com/watch?v=48t2_ObqpRs"
+                                                    target="_blank">https://www.youtube.com/watch?v=48t2_ObqpR</a>
+                                            </p>
+
+
+
+
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+
+
+
+                    </div>
                 </div>
-                <div class="col-md-2 my-2"> <select class="form-control" onChange="changeTheme()" id="themes"></select>
-                </div>
-                <div class="col-md-4" id="socialList">
-                </div>
-                <div class="col-md-2 my-3" id="year"></div>
             </div>
+
+
         </div>
-    </footer>
+        <div class="hide alert fadeInUp" role="alert" id="globalAlert"></div>
+        <footer class="footer mt-auto py-3 animated fadeInUp">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="btn-group block my-2" role="group" id="gameLinks"></div>
+                    </div>
+                    <div class="col-md-2 my-2"> <select class="form-control" onChange="changeTheme()"
+                            id="themes"></select>
+                    </div>
+                    <div class="col-md-4" id="socialList">
+                    </div>
+                    <div class="col-md-2 my-3" id="year"></div>
+                </div>
+            </div>
+        </footer>
 </body>
 <script src="js/Validate.js"></script>
 <script src="js/timestamp.js"></script>
