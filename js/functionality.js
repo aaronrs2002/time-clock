@@ -40,16 +40,23 @@ const runEmail = () => {
 
 const populateTime = (data) => {
     let clockInOutHTML = "";
-    for (let i = 0; i < data.length; i++) {
+    try {
+        for (let i = 0; i < data.length; i++) {
 
 
-        if (data[i].timeOut !== "noTimeYet") {
-            clockInOutHTML = clockInOutHTML + "<li class='list-group-item' >" + timeclockTimestamp(data[i].timeIn) + " - " + timeclockTimestamp(data[i].timeOut) + " Worked: " + ((((data[i].timeOut - data[i].timeIn) / 1000) / 60) / 60).toFixed(2) + " Hours</li>";
-        } else {
+            if (data[i].timeOut !== "noTimeYet") {
+                clockInOutHTML = clockInOutHTML + "<li class='list-group-item' >" + timeclockTimestamp(data[i].timeIn) + " - " + timeclockTimestamp(data[i].timeOut) + " Worked: " + ((((data[i].timeOut - data[i].timeIn) / 1000) / 60) / 60).toFixed(2) + " Hours</li>";
+            } else {
 
-            clockInOutHTML = clockInOutHTML + "<li class='list-group-item list-group-item-light' >" + timeclockTimestamp(data[i].timeIn) + " - Currently working.</li>";
+                clockInOutHTML = clockInOutHTML + "<li class='list-group-item list-group-item-light' >" + timeclockTimestamp(data[i].timeIn) + " - Currently working.</li>";
+            }
         }
+    } catch (error) {
+        console.log("No data yet: " + error);
+        document.querySelector("[data-clock='out']").classList.add("hide");
+        document.querySelector("[data-clock='in']").classList.remove("hide");
     }
+
 
     if (JSON.stringify(data).indexOf("noTimeYet") !== -1) {
         document.querySelector("[data-clock='in']").classList.add("hide");
@@ -480,6 +487,10 @@ buildTaskMenu();
 
 const addTask = () => {
     document.getElementById("deleteBt").disabled = false;
+    document.getElementById("inOutBts").classList.add("hide");
+    [].forEach.call(document.querySelectorAll(".showAtData"), (e) => {
+        e.classList.add("hide");
+    });
 
     let taskValue = document.getElementById("taskTarget").value;
     if (taskValue === "default") {
@@ -488,6 +499,7 @@ const addTask = () => {
 
     localStorage.setItem("activeTicket", taskValue);
     document.getElementById("chart").innerHTML = "";
+    document.getElementById("clockInOutWindow").innerHTML = "";
 
     document.querySelector("[name='dateEndMonth']").selectedIndex = 0;
     globalAlert("alert-info", "Go ahead and select a month and be sure your email is correct.");
@@ -516,7 +528,14 @@ function deleteTime() {
 
     }
 
-    localStorage.removeItem(userEmail + ":" + whichTime + ":timeClock")
+    localStorage.removeItem(userEmail + ":" + whichTime + ":timeClock");
+    console.log("deleting: " + userEmail + ":" + whichTime + ":timeClock");
     toggle("");
     buildTaskMenu();
+    document.getElementById("taskTarget").selectedIndex = 0;
+    document.getElementById("inOutBts").classList.add("hide");
+    document.querySelector("[name='filter']").classList.add("hide");
+    document.getElementById("clockInOutWindow").innerHTML = "";
+    document.querySelector("[name='dateEndMonth]").selectedIndex = 0;
+    document.getElementById("deleteBt").disabled = true;
 }
