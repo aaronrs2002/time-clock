@@ -487,6 +487,10 @@ const addTask = () => {
     }
 
     localStorage.setItem("activeTicket", taskValue);
+    document.getElementById("chart").innerHTML = "";
+
+    document.querySelector("[name='dateEndMonth']").selectedIndex = 0;
+    globalAlert("alert-info", "Go ahead and select a month and be sure your email is correct.");
 
 }
 
