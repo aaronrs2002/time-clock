@@ -97,6 +97,115 @@
                         onClick="inOut('out')">Clock
                         Out</button>
                 </div>
+
+                <div role="alert" class="alert alert-warning hide" data-toggle="editTimeSlot">
+                    <p>Edit: <span class="timeInSelected"></span></p>
+                    <div class="row">
+
+                        <div class="col-md-6">
+                            <label>Time in</label>
+                            <ul class="list-group" id="editTimeIn">
+
+                                <li class="list-group-item">
+                                    <label>Edit Year </label>
+                                    <select class="form-control" name="year"></select>
+
+                                </li>
+                                <li class="list-group-item">
+                                    <label>Edit Month </label>
+                                    <select class="form-control" name="month"></select>
+
+                                </li>
+                                <li class="list-group-item">
+                                    <label>Edit Day </label>
+                                    <select class="form-control" name="day"></select>
+
+                                </li>
+                                <li class="list-group-item">
+                                    <label>Edit AM/PM </label>
+                                    <select class="form-control" name="amPm">
+                                        <option value="AM">AM</option>
+                                        <option value="PM">PM</option>
+                                    </select>
+
+                                </li>
+                                <li class="list-group-item">
+                                    <label>Edit Hour </label>
+                                    <select class="form-control" name="hour"></select>
+
+                                </li>
+                                <li class="list-group-item">
+                                    <label>Edit Minute </label>
+                                    <select class="form-control" name="minute"></select>
+
+                                </li>
+                            </ul>
+                        </div>
+
+
+                        <div class="col-md-6">
+                            <label>Time out</label>
+                            <ul class="list-group" id="editTimeOut">
+
+                                <li class="list-group-item">
+                                    <label>Edit Year </label>
+                                    <select class="form-control" name="year"></select>
+
+                                </li>
+                                <li class="list-group-item">
+                                    <label>Edit Month </label>
+                                    <select class="form-control" name="month"></select>
+
+                                </li>
+                                <li class="list-group-item">
+                                    <label>Edit Day </label>
+                                    <select class="form-control" name="day">
+
+                                    </select>
+
+                                </li>
+                                <li class="list-group-item">
+                                    <label>Edit AM/PM </label>
+                                    <select class="form-control" name="amPm">
+                                        <option value="AM">AM</option>
+                                        <option value="PM">PM</option>
+                                    </select>
+
+                                </li>
+                                <li class="list-group-item">
+                                    <label>Edit Hour </label>
+                                    <select class="form-control" name="hour"></select>
+
+                                </li>
+                                <li class="list-group-item">
+                                    <label>Edit Minute </label>
+                                    <select class="form-control" name="minute"></select>
+
+                                </li>
+                            </ul>
+
+                        </div>
+                        <div class="col-md-12 py-2">
+                            <div class="btn-group d-flex" role="group">
+                                <button type="button" class="btn btn-secondary" onClick="toggle('')">Cancel</button>
+
+                                <button type="button" class="btn btn-success" onClick="editTimeSlot()">Update</button>
+                            </div>
+                        </div>
+                    </div>
+
+
+
+                </div>
+
+
+                <div role="alert" class="alert alert-danger hide" data-toggle="deleteTimeSlot">
+                    <p>Are you sure you want to delete: <span class="timeInSelected"></span></p>
+                    <div> <button class="btn btn-secondary" onClick="toggle('')">No</button>
+                        <button class="btn btn-danger" onClick="deleteTimeSlot()">Yes</button>
+                    </div>
+
+                </div>
                 <input type="text" name="filter" class="form-control noPrint showAtData hide"
                     placeholder="Filter times in." onKeyUp="filterHours()" /><!--be back to update the filter-->
                 <ul class="list-group" id="clockInOutWindow">

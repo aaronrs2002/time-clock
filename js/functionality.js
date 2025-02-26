@@ -45,7 +45,7 @@ const populateTime = (data) => {
 
 
             if (data[i].timeOut !== "noTimeYet") {
-                clockInOutHTML = clockInOutHTML + "<li class='list-group-item' >" + timeclockTimestamp(data[i].timeIn) + " - " + timeclockTimestamp(data[i].timeOut) + " Worked: " + ((((data[i].timeOut - data[i].timeIn) / 1000) / 60) / 60).toFixed(2) + " Hours</li>";
+                clockInOutHTML = clockInOutHTML + `<li class='list-group-item' ><button class='btn btn-danger btn-sm noPrint' title='Remove Time' alt='Remove Time' onClick="editTimes('deleteTimeSlot',${data[i].timeIn})"><i  class='far fa-trash-alt'></i></button> <button class='btn btn-warning btn-sm noPrint'  title='Edit Time' alt='Edit Time' onClick="editTimes('editTimeSlot',${data[i].timeIn})"><i  class='fas fa-edit'></i></button> - ${timeclockTimestamp(data[i].timeIn) + " - " + timeclockTimestamp(data[i].timeOut)} Worked: ${((((data[i].timeOut - data[i].timeIn) / 1000) / 60) / 60).toFixed(2)} Hours</li>`;
             } else {
 
                 clockInOutHTML = clockInOutHTML + "<li class='list-group-item list-group-item-light' >" + timeclockTimestamp(data[i].timeIn) + " - Currently working.</li>";
@@ -220,19 +220,44 @@ const startTimer = (trueFalse) => {
 /*END CLOCK IN / CLOCK OUT*/
 
 
-let monthList = document.querySelector("[name='dateEndMonth']").innerHTML;
-for (let i = 1; i < 13; i++) {
+let monthList = "";
+let dayList = "";
+let minuteList = "<option value='00'>00</option>";
+for (let i = 1; i < 60; i++) {
     if (i < 10) {
         i = "0" + i;
     }
-    monthList = monthList + "<option value=" + i + ">" + i + "</option>";
+    if (i < 13) {
+        monthList = monthList + "<option value=" + i + ">" + i + "</option>";
+    }
+
+    if (i < 32) {
+        dayList = dayList + "<option value=" + i + ">" + i + "</option>";
+    }
+
+    minuteList = minuteList + "<option value=" + i + ">" + i + "</option>";
+
+
 }
 document.querySelector("[name='dateEndMonth']").innerHTML = monthList;
+document.querySelector("#editTimeIn [name='month']").innerHTML = monthList;
+document.querySelector("#editTimeOut [name='month']").innerHTML = monthList;
+
+document.querySelector("#editTimeIn [name='day']").innerHTML = dayList;
+document.querySelector("#editTimeOut [name='day']").innerHTML = dayList;
+
+document.querySelector("#editTimeIn [name='minute']").innerHTML = minuteList;
+document.querySelector("#editTimeOut [name='minute']").innerHTML = minuteList;
+
+document.querySelector("#editTimeIn [name='hour']").innerHTML = monthList;
+document.querySelector("#editTimeOut [name='hour']").innerHTML = monthList;
 
 let yearHTML = "";
 for (let i = (year - 1); i < (year + 2); i++) {
     yearHTML = yearHTML + "<option value='" + i + "'>" + i + "</option>";
 }
+document.querySelector("#editTimeIn [name='year']").innerHTML = yearHTML;
+document.querySelector("#editTimeOut [name='year']").innerHTML = yearHTML;
 document.querySelector("[name='dateEndYear']").innerHTML = yearHTML;
 document.querySelector("[name='dateEndYear']").selectedIndex = 1;
 
@@ -256,6 +281,7 @@ const addUpDayTotals = (ym, inOrOut) => {
          data = JSON.parse(localStorage.getItem(email + ":timeClock"));
      }*/
     data = JSON.parse(localStorage.getItem(email + ":timeClock"));
+    console.log("JSON.stringify(data): " + JSON.stringify(data));
 
     /*let clockInOutHTML = "";
     for (let i = 0; i < data.length; i++) {
@@ -538,4 +564,191 @@ function deleteTime() {
     document.getElementById("clockInOutWindow").innerHTML = "";
     document.querySelector("[name='dateEndMonth]").selectedIndex = 0;
     document.getElementById("deleteBt").disabled = true;
+}
+
+
+const deleteTimeSlot = () => {
+
+    //aaron@web-presence.biz:BUDGET:another dangtitle
+
+    //  let timeObj=
+    let tempData = [];
+    let activeTime = document.querySelector(".timeInSelected").dataset.timein;
+    for (let i = 0; i < data.length; i++) {
+        console.log("data[i].timeIn: " + data[i].timeIn + " (typeof data[i].timeIn): " + (typeof data[i].timeIn));
+        console.log("activeTime: " + activeTime + " - (typeof activeTime): " + (typeof activeTime));
+        if (data[i].timeIn.toString() !== activeTime.toString()) {
+            tempData.push(data[i]);
+        }
+    }
+    console.log("JSON.stringify(tempData): " + JSON.stringify(tempData))
+
+
+    let setThis = runEmail() + ":timeClock";
+    console.log("setThis: " + setThis);
+
+    localStorage.setItem(setThis, JSON.stringify(tempData));
+    data = tempData;
+    toggle("");
+    getTotal(tempData);
+
+    populateTime(tempData);
+    document.getElementById("chart").innerHTML = "";
+    addUpDayTotals(tempData, "in");/*NOT WORKING*/
+
+}
+
+
+
+let activeNum;
+const editTimes = (toggleThis, whichTimeIn) => {
+
+
+    console.log("JSON.stringify(data): " + JSON.stringify(data));
+
+
+    for (let i = 0; i < data.length; i++) {
+        if (data[i].timeIn.toString() == whichTimeIn.toString()) {
+            activeNum = i;
+            document.querySelector("#editTimeIn select[name='year']").value = timeclockTimestamp(data[i].timeIn).substring(0, 4);
+            document.querySelector("#editTimeOut select[name='year']").value = timeclockTimestamp(data[i].timeOut).substring(0, 4);
+
+            document.querySelector("#editTimeIn select[name='month']").value = timeclockTimestamp(data[i].timeIn).substring(5, 7);
+            document.querySelector("#editTimeOut select[name='month']").value = timeclockTimestamp(data[i].timeOut).substring(5, 7);
+
+            document.querySelector("#editTimeIn select[name='day']").value = timeclockTimestamp(data[i].timeIn).substring(8, 10);
+            document.querySelector("#editTimeOut select[name='day']").value = timeclockTimestamp(data[i].timeOut).substring(8, 10);
+            console.log("AM PM: timeclockTimestamp(data[i].timeOut).substring(11, 13): " + timeclockTimestamp(data[i].timeOut).substring(11, 13));
+
+
+            document.querySelector("#editTimeIn select[name='amPm']").value = timeclockTimestamp(data[i].timeIn).substring(11, 13);
+            document.querySelector("#editTimeOut select[name='amPm']").value = timeclockTimestamp(data[i].timeOut).substring(11, 13);
+
+            console.log("hour: timeclockTimestamp(data[i].timeIn).substring(14, 16): " + timeclockTimestamp(data[i].timeIn).substring(14, 16));
+
+            document.querySelector("#editTimeIn select[name='hour']").value = timeclockTimestamp(data[i].timeIn).substring(14, 16);
+            document.querySelector("#editTimeOut select[name='hour']").value = timeclockTimestamp(data[i].timeOut).substring(14, 16);
+
+            document.querySelector("#editTimeIn select[name='minute']").value = timeclockTimestamp(data[i].timeIn).substring(17, 19);
+            console.log("MINUTE IN  timeclockTimestamp(data[i].timeIn).substring(18, 20): " + timeclockTimestamp(data[i].timeIn).substring(17, 19));
+            document.querySelector("#editTimeOut select[name='minute']").value = timeclockTimestamp(data[i].timeOut).substring(17, 19);
+
+            console.log("MinuteOUT: timeclockTimestamp(data[i].timeOut).substring(18, 20): " + timeclockTimestamp(data[i].timeOut).substring(17, 19));
+
+        }
+    }
+
+
+
+
+
+    toggle(toggleThis);
+
+    [].forEach.call(document.querySelectorAll(".timeInSelected"), (e) => {
+        e.innerHTML = timeclockTimestamp(whichTimeIn);
+        e.dataset.timein = whichTimeIn;
+    });
+
+}
+
+
+
+
+const switchToMilitaryHrs = (tempHr) => {
+    switch (tempHr) {
+
+        case "01":
+            tempHr = 13
+            break;
+        case "02":
+            tempHr = 14
+            break;
+        case "03":
+            tempHr = 15
+            break;
+        case "04":
+            tempHr = 16
+            break;
+        case "05":
+            tempHr = 17
+            break;
+        case "06":
+            tempHr = 18
+            break;
+        case "07":
+            tempHr = 19
+            break;
+        case "08":
+            tempHr = 20
+            break;
+        case "09":
+            tempHr = 21
+            break;
+        case "10":
+            tempHr = 22
+            break;
+        case "11":
+            tempHr = 23
+            break;
+        case "12":
+            tempHr = 24;
+            break;
+
+    }
+    return tempHr;
+
+}
+
+
+
+const editTimeSlot = () => {
+    //"2019-01-01T00:00:00.000Z"
+
+
+
+
+
+
+    let hourIn = document.querySelector("#editTimeIn select[name='hour']").value;
+    if (document.querySelector("#editTimeIn select[name='amPm']").value === "PM") {
+
+
+
+        hourIn = switchToMilitaryHrs(hourIn)
+
+
+        console.log("NEW HOUR IN: " + hourIn);
+    }
+
+
+    let hourOut = document.querySelector("#editTimeOut select[name='hour']").value;
+    if (document.querySelector("#editTimeOut select[name='amPm']").value === "PM") {
+        hourOut = switchToMilitaryHrs(hourOut)
+        console.log("NEW HOUR OUT: " + hourOut);
+    }
+    let tempTimeIn = document.querySelector("#editTimeIn select[name='year']").value + "-" + document.querySelector("#editTimeIn select[name='month']").value + "-" + document.querySelector("#editTimeIn select[name='day']").value + "T" + hourIn + ":" + document.querySelector("#editTimeIn select[name='minute']").value;
+    let tempTimeOut = document.querySelector("#editTimeOut select[name='year']").value + "-" + document.querySelector("#editTimeOut select[name='month']").value + "-" + document.querySelector("#editTimeOut select[name='day']").value + "T" + hourOut + ":" + document.querySelector("#editTimeOut select[name='minute']").value;
+
+    data[activeNum].timeIn = new Date(tempTimeIn).getTime();
+
+
+    console.log("tempTimeIn: " + tempTimeIn + " - new Date(tempTimeIn).getTime(); " + new Date(tempTimeIn).getTime());
+
+
+
+
+    data[activeNum].timeOut = new Date(tempTimeOut).getTime();
+    console.log("tempTimeOut: " + tempTimeOut);
+    console.log("data[activeNum].timeOut: " + data[activeNum].timeOut + " - new Date(tempTimeOut).getTime(): " + new Date(tempTimeOut).getTime());
+
+    localStorage.setItem(runEmail() + ":timeClock", JSON.stringify(data));
+    toggle("");
+    getTotal(data);
+
+    populateTime(data);
+    document.getElementById("chart").innerHTML = "";
+    addUpDayTotals(data, "in");/*NOT WORKING*/
+
+
+
 }
