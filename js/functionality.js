@@ -221,6 +221,7 @@ const startTimer = (trueFalse) => {
 
 
 let monthList = "";
+let dateEndMonthList = "<option value='default'>Select/Reset</option>";
 let dayList = "";
 let minuteList = "<option value='00'>00</option>";
 for (let i = 1; i < 60; i++) {
@@ -229,6 +230,7 @@ for (let i = 1; i < 60; i++) {
     }
     if (i < 13) {
         monthList = monthList + "<option value=" + i + ">" + i + "</option>";
+        dateEndMonthList = dateEndMonthList + "<option value=" + i + ">" + i + "</option>";
     }
 
     if (i < 32) {
@@ -239,7 +241,7 @@ for (let i = 1; i < 60; i++) {
 
 
 }
-document.querySelector("[name='dateEndMonth']").innerHTML = monthList;
+document.querySelector("[name='dateEndMonth']").innerHTML = dateEndMonthList;
 document.querySelector("#editTimeIn [name='month']").innerHTML = monthList;
 document.querySelector("#editTimeOut [name='month']").innerHTML = monthList;
 
@@ -313,10 +315,11 @@ const addUpDayTotals = (ym, inOrOut) => {
     try {
 
 
-        for (let i = 0; i < data.length; i++) {
-            if (endDate !== "default") {
-                let dateHere = timeclockTimestamp(new Date(data[i].timeIn));
-                dateHere = dateHere.toString();
+
+        if (endDate !== "default" && daysList.length) {
+            let dateHere = timeclockTimestamp(new Date(data[i].timeIn));
+            dateHere = dateHere.toString();
+            for (let i = 0; i < data.length; i++) {
                 if (dateHere.indexOf(endDate) !== -1) {
                     dateHere = dateHere.toString().substring(0, 10)
                     // if (daysList.indexOf(dateHere) === -1) {
@@ -324,49 +327,55 @@ const addUpDayTotals = (ym, inOrOut) => {
                     daysTotal.push(0);
                     // }
                 }
+            }
 
-                for (let i = 0; i < daysList.length; i++) {
-                    for (let j = 0; j < data.length; j++) {
-                        let dateHere = new Date(Number(data[j].timeIn));
-                        dateHere = dateHere.toString();
-                        let yrMoSelected = daysList[i].substring(0, 7);
-                        if (data[j].timeOut !== "noTimeYet") {
+            for (let i = 0; i < daysList.length; i++) {
+                for (let j = 0; j < data.length; j++) {
+                    let dateHere = new Date(Number(data[j].timeIn));
+                    dateHere = dateHere.toString();
+                    let yrMoSelected = daysList[i].substring(0, 7);
 
-                        }
-                        if (data[j].timeOut !== "noTimeYet" && yrMoSelected === timeclockTimestamp(dateHere).substring(0, 7)) {
-                            let tempNum = (daysTotal[i] + Number(((((data[i].timeOut - data[i].timeIn) / 1000) / 60) / 60).toFixed(2)))
-                            daysTotal[i] = parseFloat(tempNum).toFixed(2);
-                        }
+                    if (data[j].timeOut !== "noTimeYet" && yrMoSelected === timeclockTimestamp(dateHere).substring(0, 7)) {
+                        console.log("timeclockTimestamp(dateHere).substring(0, 7): " + timeclockTimestamp(dateHere).substring(0, 7));
+                        let tempNum = (daysTotal[i] + Number(((((data[i].timeOut - data[i].timeIn) / 1000) / 60) / 60).toFixed(2)))
+                        console.log("tempNum: " + tempNum);
+                        daysTotal[i] = parseFloat(tempNum).toFixed(2);
+
                     }
                 }
+            }
 
-                if (JSON.stringify(data).indexOf("noTimeYet") !== -1) {
-                    document.querySelector("[data-clock='out']").classList.remove("hide");
-                    document.querySelector("[data-clock='in']").classList.add("hide");
+            if (JSON.stringify(data).indexOf("noTimeYet") !== -1) {
+                document.querySelector("[data-clock='out']").classList.remove("hide");
+                document.querySelector("[data-clock='in']").classList.add("hide");
+            }
+            //  setCategories((categories) => daysList);
+            categories = daysList;
+
+            console.log("categories: " + categories);
+
+            console.log("totals: " + totals);
+            //setTotals((totals) => daysTotal);
+            totals = daysTotal;
+            let graphTotalList = [];
+            let tempTotal = 0;
+            for (let i = 0; i < totals.length; i++) {
+                if (totals[i] !== 'NaN') {
+                    tempTotal = Number(tempTotal) + Number(totals[i]);
+                    graphTotalList.push(Number(totals[i]))
                 }
-                //  setCategories((categories) => daysList);
-                categories = daysList;
-                //setTotals((totals) => daysTotal);
-                totals = daysTotal;
-                let graphTotalList = [];
-                let tempTotal = 0;
-                for (let i = 0; i < totals.length; i++) {
-                    if (totals[i] !== 'NaN') {
-                        tempTotal = Number(tempTotal) + Number(totals[i]);
-                        graphTotalList.push(Number(totals[i]))
-                    }
-
-                }
-                [].forEach.call(document.querySelectorAll("[data-target='total']"), (e) => {
-                    e.innerHTML = tempTotal;
-                });
-
-
 
             }
+            [].forEach.call(document.querySelectorAll("[data-target='total']"), (e) => {
+                e.innerHTML = tempTotal;
+            });
+
 
 
         }
+
+
+
         var options = {
 
             series: [{
@@ -581,11 +590,8 @@ const deleteTimeSlot = () => {
             tempData.push(data[i]);
         }
     }
-    console.log("JSON.stringify(tempData): " + JSON.stringify(tempData))
-
 
     let setThis = runEmail() + ":timeClock";
-    console.log("setThis: " + setThis);
 
     localStorage.setItem(setThis, JSON.stringify(tempData));
     data = tempData;
@@ -656,7 +662,6 @@ const editTimes = (toggleThis, whichTimeIn) => {
 
 const switchToMilitaryHrs = (tempHr) => {
     switch (tempHr) {
-
         case "01":
             tempHr = 13
             break;
@@ -691,7 +696,7 @@ const switchToMilitaryHrs = (tempHr) => {
             tempHr = 23
             break;
         case "12":
-            tempHr = 24;
+            tempHr = 12;
             break;
 
     }
@@ -704,43 +709,19 @@ const switchToMilitaryHrs = (tempHr) => {
 const editTimeSlot = () => {
     //"2019-01-01T00:00:00.000Z"
 
-
-
-
-
-
     let hourIn = document.querySelector("#editTimeIn select[name='hour']").value;
     if (document.querySelector("#editTimeIn select[name='amPm']").value === "PM") {
-
-
-
         hourIn = switchToMilitaryHrs(hourIn)
-
-
-        console.log("NEW HOUR IN: " + hourIn);
     }
-
 
     let hourOut = document.querySelector("#editTimeOut select[name='hour']").value;
     if (document.querySelector("#editTimeOut select[name='amPm']").value === "PM") {
         hourOut = switchToMilitaryHrs(hourOut)
-        console.log("NEW HOUR OUT: " + hourOut);
     }
     let tempTimeIn = document.querySelector("#editTimeIn select[name='year']").value + "-" + document.querySelector("#editTimeIn select[name='month']").value + "-" + document.querySelector("#editTimeIn select[name='day']").value + "T" + hourIn + ":" + document.querySelector("#editTimeIn select[name='minute']").value;
     let tempTimeOut = document.querySelector("#editTimeOut select[name='year']").value + "-" + document.querySelector("#editTimeOut select[name='month']").value + "-" + document.querySelector("#editTimeOut select[name='day']").value + "T" + hourOut + ":" + document.querySelector("#editTimeOut select[name='minute']").value;
-
     data[activeNum].timeIn = new Date(tempTimeIn).getTime();
-
-
-    console.log("tempTimeIn: " + tempTimeIn + " - new Date(tempTimeIn).getTime(); " + new Date(tempTimeIn).getTime());
-
-
-
-
     data[activeNum].timeOut = new Date(tempTimeOut).getTime();
-    console.log("tempTimeOut: " + tempTimeOut);
-    console.log("data[activeNum].timeOut: " + data[activeNum].timeOut + " - new Date(tempTimeOut).getTime(): " + new Date(tempTimeOut).getTime());
-
     localStorage.setItem(runEmail() + ":timeClock", JSON.stringify(data));
     toggle("");
     getTotal(data);
