@@ -26,6 +26,7 @@ const runEmail = () => {
     Validate(["email"]);
     if (document.querySelector(".error")) {
         globalAlert("alert-warning", "Please type in an email address.");
+        document.getElementById("inOutBts").classList.add("hide");
         return false;
     }
     let usingTicket = "";
@@ -43,9 +44,9 @@ const populateTime = (data) => {
     try {
         for (let i = 0; i < data.length; i++) {
 
-            let endDateYear = document.querySelector("[name='dateEndYear']").value;
-            let endDateMonth = document.querySelector("[name='dateEndMonth']").value;
-            const endDate = endDateYear + "-" + endDateMonth;
+            /*  let endDateYear = document.querySelector("[name='dateEndYear']").value;
+              let endDateMonth = document.querySelector("[name='dateEndMonth']").value;
+              const endDate = endDateYear + "-" + endDateMonth;*/
 
 
             if (data[i].timeOut !== "noTimeYet") {
@@ -246,7 +247,7 @@ for (let i = 1; i < 60; i++) {
 
 
 }
-document.querySelector("[name='dateEndMonth']").innerHTML = dateEndMonthList;
+//document.querySelector("[name='dateEndMonth']").innerHTML = dateEndMonthList;
 document.querySelector("#editTimeIn [name='month']").innerHTML = monthList;
 document.querySelector("#editTimeOut [name='month']").innerHTML = monthList;
 
@@ -265,8 +266,8 @@ for (let i = (year - 1); i < (year + 2); i++) {
 }
 document.querySelector("#editTimeIn [name='year']").innerHTML = yearHTML;
 document.querySelector("#editTimeOut [name='year']").innerHTML = yearHTML;
-document.querySelector("[name='dateEndYear']").innerHTML = yearHTML;
-document.querySelector("[name='dateEndYear']").selectedIndex = 1;
+//document.querySelector("[name='dateEndYear']").innerHTML = yearHTML;
+//document.querySelector("[name='dateEndYear']").selectedIndex = 1;
 
 
 
@@ -275,6 +276,11 @@ const addUpDayTotals = (ym, inOrOut) => {
 
 
     email = runEmail();
+
+    if (document.querySelector(".error")) {
+        globalAlert("alert-danger", "We are missing your email.");
+        return false;
+    }
 
     [].forEach.call(document.querySelectorAll(".showAtData"), (e) => {
         e.classList.remove("hide");
@@ -315,63 +321,63 @@ const addUpDayTotals = (ym, inOrOut) => {
     // console.log("JSON.stringify(data): " + JSON.stringify(data));
     let daysList = [];
     let daysTotal = [];
-    let endDateYear = document.querySelector("[name='dateEndYear']").value;
-    let endDateMonth = document.querySelector("[name='dateEndMonth']").value;
-    const endDate = endDateYear + "-" + endDateMonth;
+    /* let endDateYear = document.querySelector("[name='dateEndYear']").value;
+     let endDateMonth = document.querySelector("[name='dateEndMonth']").value;
+     const endDate = endDateYear + "-" + endDateMonth;*/
     try {
 
 
         for (let i = 0; i < data.length; i++) {
-            if (endDate !== "default") {
-                let dateHere = timeclockTimestamp(new Date(data[i].timeIn));
-                dateHere = dateHere.toString();
 
-                dateHere = dateHere.toString().substring(0, 10)
-                // if (daysList.indexOf(dateHere) === -1) {
-                daysList.push(dateHere);
-                daysTotal.push(0);
-                // }
+            let dateHere = timeclockTimestamp(new Date(data[i].timeIn));
+            dateHere = dateHere.toString();
+
+            dateHere = dateHere.toString().substring(0, 10)
+            // if (daysList.indexOf(dateHere) === -1) {
+            daysList.push(dateHere);
+            daysTotal.push(0);
+            // }
 
 
-                for (let i = 0; i < daysList.length; i++) {
-                    for (let j = 0; j < data.length; j++) {
-                        let dateHere = new Date(Number(data[j].timeIn));
-                        dateHere = dateHere.toString();
-                        let yrMoSelected = daysList[i].substring(0, 7);
-                        if (data[j].timeOut !== "noTimeYet") {
+            for (let i = 0; i < daysList.length; i++) {
+                for (let j = 0; j < data.length; j++) {
+                    let dateHere = new Date(Number(data[j].timeIn));
+                    dateHere = dateHere.toString();
+                    let yrMoSelected = daysList[i].substring(0, 7);
+                    if (data[j].timeOut !== "noTimeYet") {
 
-                        }
-                        if (data[j].timeOut !== "noTimeYet") {
-                            let tempNum = (daysTotal[i] + Number(((((data[i].timeOut - data[i].timeIn) / 1000) / 60) / 60).toFixed(2)))
-                            daysTotal[i] = parseFloat(tempNum).toFixed(2);
-                        }
+                    }
+                    if (data[j].timeOut !== "noTimeYet") {
+                        let tempNum = (daysTotal[i] + Number(((((data[i].timeOut - data[i].timeIn) / 1000) / 60) / 60).toFixed(2)))
+                        daysTotal[i] = parseFloat(tempNum).toFixed(2);
                     }
                 }
+            }
 
-                if (JSON.stringify(data).indexOf("noTimeYet") !== -1) {
-                    document.querySelector("[data-clock='out']").classList.remove("hide");
-                    document.querySelector("[data-clock='in']").classList.add("hide");
+            if (JSON.stringify(data).indexOf("noTimeYet") !== -1) {
+                document.querySelector("[data-clock='out']").classList.remove("hide");
+                document.querySelector("[data-clock='in']").classList.add("hide");
+            }
+            //  setCategories((categories) => daysList);
+            categories = daysList;
+            //setTotals((totals) => daysTotal);
+            totals = daysTotal;
+            let graphTotalList = [];
+            let tempTotal = 0;
+            for (let i = 0; i < totals.length; i++) {
+                if (totals[i] !== 'NaN') {
+                    tempTotal = Number(tempTotal) + Number(totals[i]);
+                    graphTotalList.push(Number(totals[i]))
                 }
-                //  setCategories((categories) => daysList);
-                categories = daysList;
-                //setTotals((totals) => daysTotal);
-                totals = daysTotal;
-                let graphTotalList = [];
-                let tempTotal = 0;
-                for (let i = 0; i < totals.length; i++) {
-                    if (totals[i] !== 'NaN') {
-                        tempTotal = Number(tempTotal) + Number(totals[i]);
-                        graphTotalList.push(Number(totals[i]))
-                    }
-
-                }
-                [].forEach.call(document.querySelectorAll("[data-target='total']"), (e) => {
-                    e.innerHTML = tempTotal;
-                });
-
-
 
             }
+            [].forEach.call(document.querySelectorAll("[data-target='total']"), (e) => {
+                e.innerHTML = tempTotal;
+            });
+
+
+
+
 
 
         }
@@ -535,8 +541,8 @@ const addTask = () => {
     document.getElementById("chart").innerHTML = "";
     document.getElementById("clockInOutWindow").innerHTML = "";
 
-    document.querySelector("[name='dateEndMonth']").selectedIndex = 0;
-    globalAlert("alert-info", "Go ahead and select a month and be sure your email is correct.");
+    // document.querySelector("[name='dateEndMonth']").selectedIndex = 0;
+    globalAlert("alert-info", "Go ahead and select \"View Hours Worked\" and be sure your email is correct.");
 
 }
 
