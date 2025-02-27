@@ -46,15 +46,15 @@ const populateTime = (data) => {
             let endDateYear = document.querySelector("[name='dateEndYear']").value;
             let endDateMonth = document.querySelector("[name='dateEndMonth']").value;
             const endDate = endDateYear + "-" + endDateMonth;
-            if (timeclockTimestamp(data[i].timeIn).indexOf(endDate) !== -1) {
 
-                if (data[i].timeOut !== "noTimeYet") {
-                    clockInOutHTML = clockInOutHTML + `<li class='list-group-item' ><button class='btn btn-danger btn-sm noPrint' title='Remove Time' alt='Remove Time' onClick="editTimes('deleteTimeSlot',${data[i].timeIn})"><i  class='far fa-trash-alt'></i></button> <button class='btn btn-warning btn-sm noPrint'  title='Edit Time' alt='Edit Time' onClick="editTimes('editTimeSlot',${data[i].timeIn})"><i  class='fas fa-edit'></i></button> - ${timeclockTimestamp(data[i].timeIn) + " - " + timeclockTimestamp(data[i].timeOut)} Worked: ${((((data[i].timeOut - data[i].timeIn) / 1000) / 60) / 60).toFixed(2)} Hours</li>`;
-                } else {
 
-                    clockInOutHTML = clockInOutHTML + "<li class='list-group-item list-group-item-light' >" + timeclockTimestamp(data[i].timeIn) + " - Currently working.</li>";
-                }
+            if (data[i].timeOut !== "noTimeYet") {
+                clockInOutHTML = clockInOutHTML + `<li class='list-group-item' ><button class='btn btn-danger btn-sm noPrint' title='Remove Time' alt='Remove Time' onClick="editTimes('deleteTimeSlot',${data[i].timeIn})"><i  class='far fa-trash-alt'></i></button> <button class='btn btn-warning btn-sm noPrint'  title='Edit Time' alt='Edit Time' onClick="editTimes('editTimeSlot',${data[i].timeIn})"><i  class='fas fa-edit'></i></button> - ${timeclockTimestamp(data[i].timeIn) + " - " + timeclockTimestamp(data[i].timeOut)} Worked: ${((((data[i].timeOut - data[i].timeIn) / 1000) / 60) / 60).toFixed(2)} Hours</li>`;
+            } else {
+
+                clockInOutHTML = clockInOutHTML + "<li class='list-group-item list-group-item-light' >" + timeclockTimestamp(data[i].timeIn) + " - Currently working.</li>";
             }
+
         }
     } catch (error) {
         console.log("No data yet: " + error);
@@ -270,6 +270,7 @@ document.querySelector("[name='dateEndYear']").selectedIndex = 1;
 
 
 
+
 const addUpDayTotals = (ym, inOrOut) => {
 
 
@@ -317,124 +318,120 @@ const addUpDayTotals = (ym, inOrOut) => {
     let endDateYear = document.querySelector("[name='dateEndYear']").value;
     let endDateMonth = document.querySelector("[name='dateEndMonth']").value;
     const endDate = endDateYear + "-" + endDateMonth;
+    try {
 
 
-
-    for (let i = 0; i < data.length; i++) {
-        let dateHere = timeclockTimestamp(new Date(data[i].timeIn));
-        dateHere = dateHere.toString();
-        if (dateHere.indexOf(endDate) !== -1) {
-            dateHere = dateHere.toString().substring(0, 10)
-            // if (daysList.indexOf(dateHere) === -1) {
-            daysList.push(dateHere);
-            daysTotal.push(0);
-            // }
-        }
-    }
-
-    if (endDate !== "default") {
-
-        console.log("daysList: " + daysList)
-        for (let i = 0; i < daysList.length; i++) {
-            for (let j = 0; j < data.length; j++) {
-                let dateHere = new Date(Number(data[j].timeIn));
+        for (let i = 0; i < data.length; i++) {
+            if (endDate !== "default") {
+                let dateHere = timeclockTimestamp(new Date(data[i].timeIn));
                 dateHere = dateHere.toString();
-                let yrMoSelected = daysList[i].substring(0, 7);
 
-                if (data[j].timeOut !== "noTimeYet" && yrMoSelected === timeclockTimestamp(dateHere).substring(0, 7)) {
-                    console.log("timeclockTimestamp(dateHere).substring(0, 7): " + timeclockTimestamp(dateHere).substring(0, 7));
-                    let tempNum = (daysTotal[i] + Number(((((data[j].timeOut - data[j].timeIn) / 1000) / 60) / 60).toFixed(2)))
-                    console.log("tempNum: " + tempNum);
-                    daysTotal[i] = parseFloat(tempNum).toFixed(2);
+                dateHere = dateHere.toString().substring(0, 10)
+                // if (daysList.indexOf(dateHere) === -1) {
+                daysList.push(dateHere);
+                daysTotal.push(0);
+                // }
+
+
+                for (let i = 0; i < daysList.length; i++) {
+                    for (let j = 0; j < data.length; j++) {
+                        let dateHere = new Date(Number(data[j].timeIn));
+                        dateHere = dateHere.toString();
+                        let yrMoSelected = daysList[i].substring(0, 7);
+                        if (data[j].timeOut !== "noTimeYet") {
+
+                        }
+                        if (data[j].timeOut !== "noTimeYet") {
+                            let tempNum = (daysTotal[i] + Number(((((data[i].timeOut - data[i].timeIn) / 1000) / 60) / 60).toFixed(2)))
+                            daysTotal[i] = parseFloat(tempNum).toFixed(2);
+                        }
+                    }
+                }
+
+                if (JSON.stringify(data).indexOf("noTimeYet") !== -1) {
+                    document.querySelector("[data-clock='out']").classList.remove("hide");
+                    document.querySelector("[data-clock='in']").classList.add("hide");
+                }
+                //  setCategories((categories) => daysList);
+                categories = daysList;
+                //setTotals((totals) => daysTotal);
+                totals = daysTotal;
+                let graphTotalList = [];
+                let tempTotal = 0;
+                for (let i = 0; i < totals.length; i++) {
+                    if (totals[i] !== 'NaN') {
+                        tempTotal = Number(tempTotal) + Number(totals[i]);
+                        graphTotalList.push(Number(totals[i]))
+                    }
 
                 }
-            }
-        }
+                [].forEach.call(document.querySelectorAll("[data-target='total']"), (e) => {
+                    e.innerHTML = tempTotal;
+                });
 
-        if (JSON.stringify(data).indexOf("noTimeYet") !== -1) {
-            document.querySelector("[data-clock='out']").classList.remove("hide");
-            document.querySelector("[data-clock='in']").classList.add("hide");
-        }
-        //  setCategories((categories) => daysList);
-        categories = daysList;
 
-        console.log("categories: " + categories);
 
-        console.log("totals: " + totals);
-        //setTotals((totals) => daysTotal);
-        totals = daysTotal;
-        let graphTotalList = [];
-        let tempTotal = 0;
-        for (let i = 0; i < totals.length; i++) {
-            if (totals[i] !== 'NaN') {
-                tempTotal = Number(tempTotal) + Number(totals[i]);
-                graphTotalList.push(Number(totals[i]))
             }
 
+
         }
-        [].forEach.call(document.querySelectorAll("[data-target='total']"), (e) => {
-            e.innerHTML = tempTotal;
-        });
+        var options = {
 
-
-
-    }
-
-
-
-    var options = {
-
-        series: [{
-            data: totals
-            // data: [totals[0], totals[1], totals[2], totals[3], totals[4], totals[5], totals[6], totals[7], totals[8], totals[9], totals[10], totals[11], totals[12], totals[13], totals[14], totals[15], totals[16], totals[17], totals[18], totals[19], totals[20], totals[21], totals[22], totals[23], totals[24], totals[25], totals[26], totals[27]]
-        }],
-        chart: {
-            type: 'bar',
-            height: 430
-        },
-        plotOptions: {
-            bar: {
-                horizontal: true,
-                dataLabels: {
-                    position: 'top',
-                },
-            }
-        },
-        dataLabels: {
-            enabled: true,
-            offsetX: -6,
-            style: {
-                fontSize: '12px',
+            series: [{
+                data: totals
+                // data: [totals[0], totals[1], totals[2], totals[3], totals[4], totals[5], totals[6], totals[7], totals[8], totals[9], totals[10], totals[11], totals[12], totals[13], totals[14], totals[15], totals[16], totals[17], totals[18], totals[19], totals[20], totals[21], totals[22], totals[23], totals[24], totals[25], totals[26], totals[27]]
+            }],
+            chart: {
+                type: 'bar',
+                height: 430
+            },
+            plotOptions: {
+                bar: {
+                    horizontal: true,
+                    dataLabels: {
+                        position: 'top',
+                    },
+                }
+            },
+            dataLabels: {
+                enabled: true,
+                offsetX: -6,
+                style: {
+                    fontSize: '12px',
+                    colors: ['#fff']
+                }
+            },
+            stroke: {
+                show: true,
+                width: 1,
                 colors: ['#fff']
-            }
-        },
-        stroke: {
-            show: true,
-            width: 1,
-            colors: ['#fff']
-        },
-        tooltip: {
-            shared: true,
-            intersect: false
-        },
-        xaxis: {
-            categories
-        },
-    };
+            },
+            tooltip: {
+                shared: true,
+                intersect: false
+            },
+            xaxis: {
+                categories
+            },
+        };
 
-    console.log("JSON.stringify(options): " + JSON.stringify(options));
-    if (inOrOut !== "in") {
-        document.querySelector("#chart").innerHTML = "<div class='loader'></div>";
-        setTimeout(() => {
-            document.querySelector("#chart").innerHTML = "";
-            var chart = new ApexCharts(document.querySelector("#chart"), options);
-            chart.render();
-        }, 1000);
+        console.log("JSON.stringify(options): " + JSON.stringify(options));
+        if (inOrOut !== "in") {
+            document.querySelector("#chart").innerHTML = "<div class='loader'></div>";
+            setTimeout(() => {
+                document.querySelector("#chart").innerHTML = "";
+                var chart = new ApexCharts(document.querySelector("#chart"), options);
+                chart.render();
+            }, 1000);
+
+        }
+
 
     }
 
-
-
+    catch (error) {
+        globalAlert("alert-warning", "No data yet: " + error);
+    }
 }
 
 
