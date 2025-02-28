@@ -738,3 +738,27 @@ const editTimeSlot = () => {
 
 
 }
+
+
+const downloadFunc = () => {
+
+    let timeClockData = JSON.parse(localStorage.getItem(runEmail() + ":timeClock"));
+    let hrsTotal = document.querySelector(".showAtData").innerHTML;
+    let tempData = [];
+    for (let i = 0; i < timeClockData.length; i++) {
+        let tempTotal = 0;
+        if (timeClockData[i].timeOut !== "noTimeYet") {
+            tempTotal = Number(tempTotal) + Number(((((timeClockData[i].timeOut - timeClockData[i].timeIn) / 1000) / 60) / 60).toFixed(2));
+        }
+        if (i === 0) {
+            tempData.push(["timeIn", "timeOut", "hours"], [timeclockTimestamp(timeClockData[i].timeIn), timeclockTimestamp(timeClockData[i].timeOut), tempTotal]);
+
+        } else {
+            tempData.push([timeclockTimestamp(timeClockData[i].timeIn), timeclockTimestamp(timeClockData[i].timeOut), tempTotal]);
+        }
+    }
+
+    let csvContent = "data:text/csv;charset=utf-8," + tempData.map(e => e.join(",")).join("\n");
+    var encodedUri = encodeURI(csvContent);
+    window.open(encodedUri);
+}
